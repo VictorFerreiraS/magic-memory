@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import SingleCard from "../SingleCard./SingleCard";
 import MemoryGameView from "./MemoryGameView";
+import { shuffle } from "../../features/cards";
+
 
 const cardImages = [
   { src: "/img/helmet-1.png", matched: false },
@@ -20,11 +23,15 @@ export default function MemoryGameControler() {
 
   const [disabled, setDisabled] = useState(false);
 
+  const dispatch = useDispatch();  
+
   // shuffle cards for new game
   const shuffleCards = () => {
     const shuffledCards = [...cardImages, ...cardImages]
       .sort(() => Math.random() - 0.5)
       .map((card) => ({ ...card, id: Math.random() }));
+    
+    dispatch(shuffle(shuffledCards))
 
     setChoiceOne(null);
     setChoiceTwo(null);
@@ -77,7 +84,6 @@ export default function MemoryGameControler() {
     <div>
         <MemoryGameView
         shuffleCards={shuffleCards}
-        cards={cards}
         SingleCard={SingleCard}
         handleChoice={handleChoice}
         choiceOne={choiceOne}

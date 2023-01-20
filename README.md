@@ -1,2 +1,4 @@
-In this version of the magic memory app I created the MemoryGame component folder.
-1- The Jsx and Funcitions for the component are now in a diferent file;
+In this version of the magic memory app I tranfosrmed the previus card state into a global state using react redux toolkit.
+1- The global state can be viwed in the cards.js insidethe features folder;
+2- The shuffleCard function was also modified t oattend to new global state;
+3- The index.js was changed as standard for redux;

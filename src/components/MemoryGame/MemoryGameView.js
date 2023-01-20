@@ -1,22 +1,28 @@
 import React from "react";
 import "./MemoryGameView.css"
 
+// Redux
+import { useSelector } from "react-redux";
+
 export default function MemoryGameView({
   shuffleCards,
   SingleCard,
-  cards,
   handleChoice,
   choiceOne,
   choiceTwo,
   disabled,
   turns,
 }) {
+
+  const card = useSelector((state => state.card.value))
+
+
   return (
     <div>
       <h1>Magic Match</h1>
       <button onClick={shuffleCards}>New Game</button>
       <div className="card-grid">
-        {cards.map((card) => (
+        {card.map((card) => (
           <SingleCard
             key={card.id}
             card={card}
