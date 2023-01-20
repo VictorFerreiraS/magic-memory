@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SingleCard from "../SingleCard./SingleCard";
 import MemoryGameView from "./MemoryGameView";
-import { shuffle } from "../../features/cards";
-
+import { setCardsRedux } from "../../features/cards";
 
 const cardImages = [
   { src: "/img/helmet-1.png", matched: false },
@@ -15,27 +14,27 @@ const cardImages = [
 ];
 
 export default function MemoryGameControler() {
-  const [cards, setCards] = useState([]);
+  const cardsRedux = useSelector((state) => state.cardsRedux.value);
+  
+  
   const [turns, setTurns] = useState(0);
-
   const [choiceOne, setChoiceOne] = useState(null);
   const [choiceTwo, setChoiceTwo] = useState(null);
 
   const [disabled, setDisabled] = useState(false);
 
-  const dispatch = useDispatch();  
+  const dispatch = useDispatch();
 
   // shuffle cards for new game
   const shuffleCards = () => {
     const shuffledCards = [...cardImages, ...cardImages]
       .sort(() => Math.random() - 0.5)
       .map((card) => ({ ...card, id: Math.random() }));
-    
-    dispatch(shuffle(shuffledCards))
+
+    dispatch(setCardsRedux(shuffledCards));
 
     setChoiceOne(null);
     setChoiceTwo(null);
-    setCards(shuffledCards);
     setTurns(0);
   };
 
@@ -45,24 +44,25 @@ export default function MemoryGameControler() {
   };
 
   // compare 2 selected cards
+  const compareTwoCards = () => {
+    if (choiceOne.src === choiceTwo.src) {
+          dispatch(setCardsRedux(cardsRedux.map((card) => {
+          if (card.src === choiceOne.src) {
+            return { ...card, matched: true };
+          } else {
+            return card;
+          }
+        })));
+      setTimeout(() => resetTurn(), 1000);
+    } else {
+      setTimeout(() => resetTurn(), 1000);
+    }
+  };
+
   useEffect(() => {
     if (choiceOne && choiceTwo != null) {
       setDisabled(true);
-
-      if (choiceOne.src === choiceTwo.src) {
-        setCards((prevCards) => {
-          return prevCards.map((card) => {
-            if (card.src === choiceOne.src) {
-              return { ...card, matched: true };
-            } else {
-              return card;
-            }
-          });
-        });
-        setTimeout(() => resetTurn(), 1000);
-      } else {
-        setTimeout(() => resetTurn(), 1000);
-      }
+      compareTwoCards();
     }
   }, [choiceOne, choiceTwo]);
 
@@ -79,10 +79,9 @@ export default function MemoryGameControler() {
     shuffleCards();
   }, []);
 
-
   return (
     <div>
-        <MemoryGameView
+      <MemoryGameView
         shuffleCards={shuffleCards}
         SingleCard={SingleCard}
         handleChoice={handleChoice}
@@ -92,5 +91,5 @@ export default function MemoryGameControler() {
         turns={turns}
       />
     </div>
-  )
+  );
 }

@@ -14,7 +14,7 @@ export default function MemoryGameView({
   turns,
 }) {
 
-  const card = useSelector((state => state.card.value))
+  const card = useSelector((state => state.cardsRedux.value))
 
 
   return (

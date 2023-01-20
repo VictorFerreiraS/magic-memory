@@ -11,7 +11,7 @@ import cardReducer from "./features/cards"
 
 const store = configureStore({
   reducer: {
-    card: cardReducer,
+    cardsRedux: cardReducer,
   },
 });
 

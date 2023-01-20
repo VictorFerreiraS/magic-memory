@@ -1,15 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const cardsSlice = createSlice({
-  name: "cards",
+  name: "cardsRedux",
   initialState: { value: [] },
   reducers: {
-    shuffle: (state, action) => {
+    setCardsRedux: (state, action) => {
       state.value = action.payload;
     },
   },
 });
 
-export const {shuffle} = cardsSlice.actions;
+export const { setCardsRedux } = cardsSlice.actions;
 
 export default cardsSlice.reducer;
